@@ -39,9 +39,9 @@ class ImportFile(models.TransientModel):
         if self.import_option == 'xls':
             try:
                 fp = tempfile.NamedTemporaryFile(delete= False,suffix=".xlsx")
-                print(fp, "/"*50)
                 fp.write(binascii.a2b_base64(self.File_slect))
                 fp.seek(0)
+                print(fp, "/"*50)
                 values = {}
                 workbook = xlrd.open_workbook(fp.name)
                 sheet = workbook.sheet_by_index(0)
