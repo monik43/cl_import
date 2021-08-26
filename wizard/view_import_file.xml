@@ -4,7 +4,7 @@
 
 		<record id="wizard_import_file" model="ir.ui.view">
 			<field name="name">wizard.wizard.import.file.form</field>
-			<field name="model">import.file</field>
+			<field name="model">cl.import.file</field>
 			<field name="arch" type="xml">
 				<form string="Import Chart Of Accounts">
 					<group>
@@ -24,7 +24,7 @@
 
 		<record id="import_file" model="ir.actions.act_window">
 			<field name="name">Import file</field>
-			<field name="res_model">import.file</field>
+			<field name="res_model">cl.import.file</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">form</field>
 			<field name="view_id" ref="wizard_import_file" />

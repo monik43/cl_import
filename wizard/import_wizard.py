@@ -29,7 +29,7 @@ except ImportError:
     _logger.debug('Cannot `import base64`.')
 
 class ImportFile(models.TransientModel):
-    _name = "import.file"
+    _name = "cl.import.file"
 
     file_import = fields.Binary(string="Archivo a importar")
     import_option = fields.Selection([('csv', 'CSV File'),('xls', 'XLS File')],string='Tipo de archivo',default='xls')
