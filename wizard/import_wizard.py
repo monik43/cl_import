@@ -39,7 +39,6 @@ class ImportFile(models.TransientModel):
         if self.import_option == 'xls':
             try:
                 fp = tempfile.NamedTemporaryFile(delete= False,suffix=".xlsx")
-                print(fp)
                 fp.write(binascii.a2b_base64(self.File_slect))
                 fp.seek(0)
                 values = {}
