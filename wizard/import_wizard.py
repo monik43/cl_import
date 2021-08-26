@@ -14,19 +14,19 @@ import io
 try:
     import csv
 except ImportError:
-    _logger.debug('Cannot `import csv`.')
+    print('Cannot `import csv`.')
 try:
     import xlwt
 except ImportError:
-    _logger.debug('Cannot `import xlwt`.')
+    print('Cannot `import xlwt`.')
 try:
     import cStringIO
 except ImportError:
-    _logger.debug('Cannot `import cStringIO`.')
+    print('Cannot `import cStringIO`.')
 try:
     import base64
 except ImportError:
-    _logger.debug('Cannot `import base64`.')
+    print('Cannot `import base64`.')
 
 class ImportFile(models.TransientModel):
     _name = "cl.import.file"
@@ -41,7 +41,6 @@ class ImportFile(models.TransientModel):
                 fp = tempfile.NamedTemporaryFile(delete= False,suffix=".xlsx")
                 fp.write(binascii.a2b_base64(self.file_import))
                 fp.seek(0)
-                print("a")
                 values = {}
                 workbook = xlrd.open_workbook(fp.name)
                 sheet = workbook.sheet_by_index(0)
