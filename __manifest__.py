@@ -26,8 +26,4 @@
     'data': [
         'wizard/view_import_file.xml',
     ],
-    # only loaded in demonstration mode
-    'demo': [
-        'demo/demo.xml',
-    ],
 }
