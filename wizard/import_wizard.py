@@ -60,7 +60,6 @@ class ImportFile(models.TransientModel):
             raise Warning(_("Archivo inválido"))
 
         for row_no in range(sheet.nrows):
-            val = {}
             if row_no != 0:
                 line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode(
                     'utf-8') or str(row.value), sheet.row(row_no)))
@@ -75,4 +74,4 @@ class ImportFile(models.TransientModel):
             s = str(values.get("lot_id"))
             lot_no = s.rstrip('0').rstrip('.') if '.' in s else s
 
-            print(lot_no, "/"*50)
+            print(s, ",", lot_no, "/"*50)
