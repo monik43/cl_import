@@ -8,6 +8,7 @@
 			<field name="arch" type="xml">
 				<form string="Importar archivo">
 					<group>
+						<field name="product" domain="[('product_id','in',)]"/>
 						<field name="file_import" filename="name"/>
 					</group>
 					<footer>
