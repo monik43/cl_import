@@ -34,7 +34,8 @@ class ImportFile(models.TransientModel):
     def default_get(self, fields):
         res = super(ImportFile, self).default_get(fields)
         stock_picking = self.env['stock.picking'].browse(self._context.get('active_ids',[]))
-        print(stock_picking.move_lines.product_id.name, "/"*50)
+        for product in stock_picking.move_lines:
+            print(product.product_id.name, "/"*50)
         return res
 
     @api.multi
