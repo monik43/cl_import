@@ -66,7 +66,7 @@ class ImportFile(models.TransientModel):
                                     'deprecat' :line[8],
                                     })
                     for v in values:
-                        print(v)
+                        print(v,": ", v[0])
                     #res = self.create_chart_accounts(values)		
         else:
             raise Warning(_("Formato incorrecto"))
