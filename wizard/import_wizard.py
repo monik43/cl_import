@@ -55,7 +55,6 @@ class ImportFile(models.TransientModel):
                 else:
                     
                     line = list(map(lambda row:isinstance(row.value, bytes) and row.value.encode('utf-8') or str(row.value), sheet.row(row_no)))
-                    print(line)
                     values.update( {'code' : line[0],
                                     'name' : line[1],
                                     'user' : line[2],
@@ -66,7 +65,8 @@ class ImportFile(models.TransientModel):
                                     'reconcile':line[7],
                                     'deprecat' :line[8],
                                     })
-                    print(values)
+                    for v in values:
+                        print(v)
                     #res = self.create_chart_accounts(values)		
         else:
             raise Warning(_("Formato incorrecto"))
