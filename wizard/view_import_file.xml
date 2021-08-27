@@ -6,7 +6,7 @@
 			<field name="name">wizard.wizard.import.file.form</field>
 			<field name="model">cl.import.file</field>
 			<field name="arch" type="xml">
-				<form string="Import Chart Of Accounts">
+				<form string="Importar archivo">
 					<group>
 						<field name="file_import" filename="name"/>
 					</group>
