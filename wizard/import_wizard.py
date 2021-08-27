@@ -64,8 +64,7 @@ class ImportFile(models.TransientModel):
                 line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode(
                     'utf-8') or str(row.value), sheet.row(row_no)))
                 values.update({'lot_id': line[0]})
-                print(self.product.product_id.uom_id)
-                #res = self.create_move_lines(values)
+                res = self.create_move_lines(values)
                 
         #return res
 
@@ -74,7 +73,5 @@ class ImportFile(models.TransientModel):
         if values.get("lot_id"):
             s = str(values.get("lot_id"))
             lot_id = s.rstrip('0').rstrip('.') if '.' in s else s
-
-            print(s, ",", lot_id, "/"*50)
 
             self.product.update({'move_line_ids':[(0,0, {'lot_id': lot_id, 'qty_done':1, 'product_uom_id':1})]})
