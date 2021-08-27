@@ -66,8 +66,6 @@ class ImportFile(models.TransientModel):
                     'utf-8') or str(row.value), sheet.row(row_no)))
                 values.update({'lot_id': line[0]})
                 res = self.create_move_lines(values)
-                for val in values:
-                    print(val, ": ", values[val])
                 
         return res
 
@@ -77,4 +75,4 @@ class ImportFile(models.TransientModel):
             s = str(values.get("lot_id"))
             lot_no = s.rstrip('0').rstrip('.') if '.' in s else s
 
-            print(lot_no)
+            print(lot_no, "/"*50)
