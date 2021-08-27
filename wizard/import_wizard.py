@@ -55,7 +55,7 @@ class ImportFile(models.TransientModel):
                 else:
                     
                     line = list(map(lambda row:isinstance(row.value, bytes) and row.value.encode('utf-8') or str(row.value), sheet.row(row_no)))
-
+                    print(line)
                     values.update( {'code' : line[0],
                                     'name' : line[1],
                                     'user' : line[2],
