@@ -37,7 +37,7 @@ class ImportFile(models.TransientModel):
         for product in stock_picking.move_lines:
             print(product.product_id.name, "/"*50)
             for line in product.move_line_nosuggest_ids:
-                print(line)
+                print(line.CSN)
         return res
 
     @api.multi
