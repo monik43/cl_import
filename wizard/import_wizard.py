@@ -36,6 +36,8 @@ class ImportFile(models.TransientModel):
         stock_picking = self.env['stock.picking'].browse(self._context.get('active_ids',[]))
         for product in stock_picking.move_lines:
             print(product.product_id.name, "/"*50)
+            for line in product.move_nosuggest_ids:
+                print(line.CSN)
         return res
 
     @api.multi
