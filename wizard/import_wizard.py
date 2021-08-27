@@ -42,7 +42,7 @@ class ImportFile(models.TransientModel):
         vals = []
         for product_line in stock_picking.move_lines:
             vals.append(product_line.id)
-
+        
         res.update({'products_move': [(6,0, vals)]})
         return res
 
@@ -64,14 +64,17 @@ class ImportFile(models.TransientModel):
                 line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode(
                     'utf-8') or str(row.value), sheet.row(row_no)))
                 values.update({'lot_id': line[0]})
-                res = self.create_move_lines(values)
+                print(self.product.product_id.product_uom_id)
+                #res = self.create_move_lines(values)
                 
-        return res
+        #return res
 
     @api.multi
     def create_move_lines(self, values):
         if values.get("lot_id"):
             s = str(values.get("lot_id"))
-            lot_no = s.rstrip('0').rstrip('.') if '.' in s else s
+            lot_id = s.rstrip('0').rstrip('.') if '.' in s else s
 
-            print(s, ",", lot_no, "/"*50)
+            print(s, ",", lot_id, "/"*50)
+
+            self.product.update({'move_line_ids':[(0,0, {'lot_id': lot_id, 'qty_done':1, 'product_uom_id':1})]})
