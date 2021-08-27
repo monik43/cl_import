@@ -61,10 +61,10 @@ class ImportFile(models.TransientModel):
                 line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode(
                     'utf-8') or str(row.value), sheet.row(row_no)))
                 values.update({'name': line[0]})
-                res = self.create_chart_accounts(values)
+                #res = self.create_chart_accounts(values)
                 for val in values:
                     print(val, ": ", values[val])
-        return res
+        #return res
 
     @api.multi
     def create_chart_accounts(self,values):
