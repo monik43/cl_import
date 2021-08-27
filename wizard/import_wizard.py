@@ -72,7 +72,7 @@ class ImportFile(models.TransientModel):
                     for val in values:
                         print(val)
                         for v in val:
-                            print(v)
+                            print(values[val][v])
                     #res = self.create_chart_accounts(values)
         else:
             raise Warning(_("Formato incorrecto"))
