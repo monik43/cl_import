@@ -28,14 +28,14 @@ except ImportError:
 class ImportFile(models.TransientModel):
     _name = "cl.import.file"
 
-    move_lines = fields.One2many('stock.move', 'picking_id', string="Stock Moves", copy=True)
     file_import = fields.Binary(string="Archivo a importar")
 
-    @api.onchange('move_lines')
-    def _onchange_move_lives(self):
-        self.ensure_one()
-        for line in self.move_lines:
-            print(line, "-"*50)
+    @api.model
+    def default_get(self, fields):
+        res = super(ImportFile, self).default_get(fields)
+        stock_picking = self.env['stock.picking'].browse(self._context.get('active_ids',[]))
+        print(stock_picking.move_lines)
+        return res
 
     @api.multi
     def import_file(self):
