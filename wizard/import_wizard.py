@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import io
 import time
 from datetime import datetime
 import tempfile
@@ -10,7 +11,6 @@ from odoo.exceptions import Warning, UserError
 from odoo import models, fields, exceptions, api, _
 import logging
 _logger = logging.getLogger(__name__)
-import io
 try:
     import csv
 except ImportError:
@@ -28,17 +28,19 @@ try:
 except ImportError:
     print('Cannot `import base64`.')
 
+
 class ImportFile(models.TransientModel):
     _name = "cl.import.file"
 
     file_import = fields.Binary(string="Archivo a importar")
-    import_option = fields.Selection([('csv', 'CSV File'),('xls', 'XLS File')],string='Tipo de archivo',default='xls')
+    import_option = fields.Selection(
+        [('csv', 'CSV File'), ('xls', 'XLS File')], string='Tipo de archivo', default='xls')
 
     @api.multi
     def import_file(self):
         if self.import_option == 'xls':
             try:
-                fp = tempfile.NamedTemporaryFile(delete= False,suffix=".xlsx")
+                fp = tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx")
                 fp.write(binascii.a2b_base64(self.file_import))
                 fp.seek(0)
                 values = {}
@@ -51,35 +53,37 @@ class ImportFile(models.TransientModel):
             for row_no in range(sheet.nrows):
                 val = {}
                 if row_no <= 0:
-                    fields = map(lambda row:row.value.encode('utf-8'), sheet.row(row_no))
+                    fields = map(lambda row: row.value.encode(
+                        'utf-8'), sheet.row(row_no))
                 else:
-                    
-                    line = list(map(lambda row:isinstance(row.value, bytes) and row.value.encode('utf-8') or str(row.value), sheet.row(row_no)))
-                    values.update( {'code' : line[0],
-                                    'name' : line[1],
-                                    'user' : line[2],
-                                    'tax'  : line[3],
-                                    'tag'  : line[4],
-                                    'group': line[5],
-                                    'currency' :line[6],
-                                    'reconcile':line[7],
-                                    'deprecat' :line[8],
-                                    })
+
+                    line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode(
+                        'utf-8') or str(row.value), sheet.row(row_no)))
+                    values.update({'val': {'code': line[0],
+                                           'name': line[1],
+                                           'user': line[2],
+                                           'tax': line[3],
+                                           'tag': line[4],
+                                           'group': line[5],
+                                           'currency': line[6],
+                                           'reconcile': line[7],
+                                           'deprecat': line[8],
+                                           }})
                     for v in values:
-                        print(v,": ", values[v])
-                    #res = self.create_chart_accounts(values)		
+                        print(v, ": ", values[v])
+                    #res = self.create_chart_accounts(values)
         else:
             raise Warning(_("Formato incorrecto"))
-        
-        #return res
+
+        # return res
     @api.multi
-    def create_chart_accounts(self,values):
+    def create_chart_accounts(self, values):
 
         if values.get("code") == "":
-            raise Warning(_('Code field cannot be empty.') )
+            raise Warning(_('Code field cannot be empty.'))
 
         if values.get("name") == "":
-            raise Warning(_('Name Field cannot be empty.') )
+            raise Warning(_('Name Field cannot be empty.'))
 
         if values.get("user") == "":
             raise Warning(_('Type field cannot be empty.'))
@@ -91,47 +95,46 @@ class ImportFile(models.TransientModel):
         account_obj = self.env['account.account']
         account_search = account_obj.search([
             ('code', '=', values.get('code'))
-            ])
+        ])
 
-        
         is_reconcile = False
-        is_deprecated= False
+        is_deprecated = False
 
         if values.get("reconcile") == 'TRUE' or values.get("reconcile") == "1":
-                is_reconcile = True
+            is_reconcile = True
 
         if values.get("deprecat") == 'TRUE' or values.get("deprecat") == "1":
-                is_deprecated = True
+            is_deprecated = True
 
         user_id = self.find_user_type(values.get('user'))
         currency_get = self.find_currency(values.get('currency'))
         group_get = self.find_group(values.get('group'))
 
-        
 
 # --------tax-
         tax_ids = []
         if values.get('tax'):
-            if ';' in  values.get('tax'):
+            if ';' in values.get('tax'):
                 tax_names = values.get('tax').split(';')
                 for name in tax_names:
-                    tax= self.env['account.tax'].search([('name', '=', name)])
+                    tax = self.env['account.tax'].search([('name', '=', name)])
                     if not tax:
                         raise Warning(_('%s Tax not in your system') % name)
                     for t in tax:
                         tax_ids.append(t)
 
-            elif ',' in  values.get('tax'):
+            elif ',' in values.get('tax'):
                 tax_names = values.get('tax').split(',')
                 for name in tax_names:
-                    tax= self.env['account.tax'].search([('name', '=', name)])
+                    tax = self.env['account.tax'].search([('name', '=', name)])
                     if not tax:
                         raise Warning(_('%s Tax not in your system') % name)
                     for t in tax:
                         tax_ids.append(t)
             else:
                 tax_names = values.get('tax').split(',')
-                tax= self.env['account.tax'].search([('name', '=', tax_names)])
+                tax = self.env['account.tax'].search(
+                    [('name', '=', tax_names)])
                 if not tax:
                     raise Warning(_('%s Tax not in your system') % tax_names)
                 for t in tax:
@@ -140,40 +143,43 @@ class ImportFile(models.TransientModel):
 # ------------tags
         tag_ids = []
         if values.get('tag'):
-            if ';' in  values.get('tag'):
+            if ';' in values.get('tag'):
                 tag_names = values.get('tag').split(';')
                 for name in tag_names:
-                    tag= self.env['account.account.tag'].search([('name', '=', name)])
+                    tag = self.env['account.account.tag'].search(
+                        [('name', '=', name)])
                     if not tag:
                         raise Warning(_('%s Tag not in your system') % name)
                     tag_ids.append(tag)
 
-            elif ',' in  values.get('tag'):
+            elif ',' in values.get('tag'):
                 tag_names = values.get('tag').split(',')
                 for name in tag_names:
-                    tag= self.env['account.account.tag'].search([('name', '=', name)])
+                    tag = self.env['account.account.tag'].search(
+                        [('name', '=', name)])
                     if not tag:
                         raise Warning(_('%s Tag not in your system') % name)
                     tag_ids.append(tag)
             else:
                 tag_names = values.get('tag').split(',')
-                tag= self.env['account.account.tag'].search([('name', '=', tag_names)])
+                tag = self.env['account.account.tag'].search(
+                    [('name', '=', tag_names)])
                 if not tag:
                     raise Warning(_('%s Tag not in your system') % tag_names)
                 tag_ids.append(tag)
 
         abc = {
-                'code' : code_no,
-                'name' : values.get('name'),
-                'user_type_id':user_id.id,
-                'tax_ids':[(6,0,[y.id for y in tax_ids])]if values.get('tax') else False,	
-                'tag_ids':[(6,0,[x.id for x in tag_ids])]if values.get('tag') else False,
-                'group_id':group_get.id,
-                'currency_id':currency_get or False,
-                'reconcile':is_reconcile,
-                'deprecated':is_deprecated,
+            'code': code_no,
+            'name': values.get('name'),
+            'user_type_id': user_id.id,
+            'tax_ids': [(6, 0, [y.id for y in tax_ids])]if values.get('tax') else False,
+            'tag_ids': [(6, 0, [x.id for x in tag_ids])]if values.get('tag') else False,
+            'group_id': group_get.id,
+            'currency_id': currency_get or False,
+            'reconcile': is_reconcile,
+            'deprecated': is_deprecated,
         }
-        chart_id = account_obj.create(abc)		
+        chart_id = account_obj.create(abc)
 
         return chart_id
 
@@ -181,9 +187,9 @@ class ImportFile(models.TransientModel):
 # ---------------------------user-----------------
 
     @api.multi
-    def find_user_type(self,user):
-        user_type=self.env['account.account.type']
-        user_search = user_type.search([('name','=',user)])
+    def find_user_type(self, user):
+        user_type = self.env['account.account.type']
+        user_search = user_type.search([('name', '=', user)])
 
         if user_search:
             return user_search
@@ -208,14 +214,14 @@ class ImportFile(models.TransientModel):
 # -----------------group-------
 
     @api.multi
-    def find_group(self,group):
-        group_type=self.env['account.group']
-        group_search = group_type.search([('name','=',group)])
+    def find_group(self, group):
+        group_type = self.env['account.group']
+        group_search = group_type.search([('name', '=', group)])
 
         if group_search:
             return group_search
         else:
             group_id = group_type.create({
-                'name' : group
-                })
+                'name': group
+            })
             return group_id
