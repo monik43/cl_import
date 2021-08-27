@@ -43,7 +43,6 @@ class ImportFile(models.TransientModel):
                 fp.seek(0)
                 values = {}
                 workbook = xlrd.open_workbook(fp.name)
-                print(fp.name, "/"*50)
                 sheet = workbook.sheet_by_index(0)
 
             except:
@@ -67,8 +66,7 @@ class ImportFile(models.TransientModel):
                                     'reconcile':line[7],
                                     'deprecat' :line[8],
                                     })
-                    for line in values:
-                        print(line)
+                    print(values)
                     #res = self.create_chart_accounts(values)		
         else:
             raise Warning(_("Formato incorrecto"))
