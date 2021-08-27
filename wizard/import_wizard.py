@@ -65,7 +65,7 @@ class ImportFile(models.TransientModel):
                                     'reconcile':line[7],
                                     'deprecat' :line[8],
                                     })
-                    res = self.create_chart_accounts(values)
+                    #res = self.create_chart_accounts(values)
                     for val in values:
                         print(val, ": ", values[val])		
         else:
