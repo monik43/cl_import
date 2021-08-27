@@ -66,7 +66,7 @@ class ImportFile(models.TransientModel):
                 values.update({'lot_id': line[0]})
                 res = self.create_move_lines(values)
                 
-        #return res
+        return res
 
     @api.multi
     def create_move_lines(self, values):
