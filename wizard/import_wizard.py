@@ -64,7 +64,7 @@ class ImportFile(models.TransientModel):
                 line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode(
                     'utf-8') or str(row.value), sheet.row(row_no)))
                 values.update({'lot_id': line[0]})
-                print(self.product.product_id.product_uom_id)
+                print(self.product.product_id.uom_id)
                 #res = self.create_move_lines(values)
                 
         #return res
