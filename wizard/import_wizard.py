@@ -38,9 +38,9 @@ class ImportFile(models.TransientModel):
         stock_picking = self.env['stock.picking'].browse(self._context.get('active_ids',[]))
         vals = []
         for product_line in stock_picking.move_lines:
-            vals.append((4,product_line.id))
-        print(vals)
-        res.update({'products_move': [(6,0, [18984,18985])]})
+            vals.append(product_line.id)
+
+        res.update({'products_move': [(6,0, vals)]})
         return res
 
     @api.multi
