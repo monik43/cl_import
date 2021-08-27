@@ -28,7 +28,7 @@ except ImportError:
 class ImportFile(models.TransientModel):
     _name = "cl.import.file"
     
-    products_pick = fields.One2many('stock.move','picking_id')
+    products_move = fields.One2many('stock.move','picking_id')
     product = fields.Many2one('stock.move')
     file_import = fields.Binary(string="Archivo a importar")
 
@@ -36,10 +36,11 @@ class ImportFile(models.TransientModel):
     def default_get(self, fields):
         res = super(ImportFile, self).default_get(fields)
         stock_picking = self.env['stock.picking'].browse(self._context.get('active_ids',[]))
-        for product in stock_picking.move_lines:
-            print(product.product_id.name, "/"*50)
-            for line in product.move_line_nosuggest_ids:
-                print(line.CSN)
+        vals = []
+        for product_line in stock_picking.move_lines:
+            vals.append((4,product_line.id))
+
+        res.update({'products_move': vals})
         return res
 
     @api.multi
