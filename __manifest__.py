@@ -25,5 +25,6 @@
     # always loaded
     'data': [
         'wizard/view_import_file.xml',
+        'views/cl_import_views.xml',
     ],
 }

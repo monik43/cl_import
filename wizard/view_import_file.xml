@@ -8,10 +8,6 @@
 			<field name="arch" type="xml">
 				<form string="Import Chart Of Accounts">
 					<group>
-						<field name="import_option" widget="radio" />
-					</group>
-
-					<group>
 						<field name="file_import" filename="name"/>
 					</group>
 					<footer>
@@ -30,9 +26,6 @@
 			<field name="view_id" ref="wizard_import_file" />
 			<field name="target">new</field>
 		</record>
-
-		<!--<menuitem id="menu_import_chart_of_account" name="Imports" parent="account.menu_finance" groups="account.group_account_manager" sequence="5"/>-->
-		<menuitem id="menu_import_file" action="import_file" name="Import file" parent="account.menu_finance_receivables" sequence="0"/>
 
 	</data>
 </odoo>
