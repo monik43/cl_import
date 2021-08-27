@@ -28,7 +28,7 @@ except ImportError:
 class ImportFile(models.TransientModel):
     _name = "cl.import.file"
     
-    products_pick = fields.One2many('stock.picking','move_lines')
+    products_pick = fields.One2many('stock.move','picking_id')
     product = fields.Many2one('stock.move')
     file_import = fields.Binary(string="Archivo a importar")
 
