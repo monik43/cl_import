@@ -40,7 +40,7 @@ class ImportFile(models.TransientModel):
         for product_line in stock_picking.move_lines:
             vals.append((4,product_line.id))
         print(vals)
-        res.update({'products_move': vals})
+        res.update({'products_move': [(4, 18984), (4, 18985)]})
         return res
 
     @api.multi
