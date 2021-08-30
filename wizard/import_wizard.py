@@ -29,7 +29,7 @@ class ImportFile(models.TransientModel):
     _name = "cl.import.file"
     
     products_move = fields.One2many('stock.move','picking_id')
-    product = fields.Many2one('stock.move', "Producto a procesar", domain="[('product_id','in',products_move.product_id)]")
+    product = fields.Many2one('stock.move', "Producto a procesar", domain="[('id','in',products_move)]")
     file_import = fields.Binary("Archivo a importar")
 
     
