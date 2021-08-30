@@ -43,6 +43,7 @@ class ImportFile(models.TransientModel):
         for product_line in stock_picking.move_lines:
             vals.append(product_line.id)
         stock_picking.move_lines = a
+        print(vals)
         res.update({'products_move': [(6,0, vals)]})
         return res
 
