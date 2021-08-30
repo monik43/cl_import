@@ -37,7 +37,7 @@ class ImportFile(models.TransientModel):
     @api.model
     def default_get(self, fields):
         res = super(ImportFile, self).default_get(fields)
-        stock_picking = self.env['stock.picking'].browse(self._context.get('active_ids',[]))
+        """stock_picking = self.env['stock.picking'].browse(self._context.get('active_ids',[]))
         vals = []
         a = stock_picking.move_lines
         for product_line in stock_picking.move_lines:
@@ -45,7 +45,7 @@ class ImportFile(models.TransientModel):
         stock_picking.move_lines = a
         print(vals)
         res.update({'products_move': [(6,0, vals)]})
-        return res
+        return res"""
 
     @api.multi
     def import_file(self):
