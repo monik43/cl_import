@@ -46,6 +46,7 @@ class ImportFile(models.TransientModel):
         print(vals)
         res.update({'products_move': [(6,0, vals)]})
         return res"""
+        return res
 
     @api.multi
     def import_file(self):
