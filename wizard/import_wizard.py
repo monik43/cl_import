@@ -39,7 +39,7 @@ class ImportFile(models.TransientModel):
         res = super(ImportFile, self).default_get(fields)
         stock_picking = self.env['stock.picking'].browse(self._context.get('active_ids',[]))
         for line in stock_picking.move_lines:
-            res.update({'products_move': [(0,0, {'name':line.name, 'product_id':line.product_id.id, 'product_uom_qty': line.product_uom_qty, 'location_id': line.location_id.id, 'location_dest_id': line.location_dest_id.id})]})
+            res.update({'products_move': [(0,0, {'id': line.id, 'name':line.name, 'product_id':line.product_id.id, 'product_uom_qty': line.product_uom_qty, 'location_id': line.location_id.id, 'location_dest_id': line.location_dest_id.id})]})
         return res
 
     @api.multi
