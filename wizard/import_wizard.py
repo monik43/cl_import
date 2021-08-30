@@ -28,8 +28,9 @@ except ImportError:
 class ImportFile(models.TransientModel):
     _name = "cl.import.file"
     
+    origin = fields.Char()
     products_move = fields.One2many('stock.move','picking_id')
-    product = fields.Many2one('stock.move', "Producto a procesar", domain="[('origin','=','PO/2021/04231')]")
+    product = fields.Many2one('stock.move', "Producto a procesar", domain="[('origin','=',self.origin)]")
     file_import = fields.Binary("Archivo a importar")
 
     
@@ -38,6 +39,7 @@ class ImportFile(models.TransientModel):
     def default_get(self, fields):
         res = super(ImportFile, self).default_get(fields)
         stock_picking = self.env['stock.picking'].browse(self._context.get('active_ids',[]))
+        self.origin = stock_picking.origin
         for line in stock_picking.move_lines:
             res.update({'products_move': [(0,0, {'product_uom_id':1, 'date': line.date, 'date_expected': line.date_expected,'id': line.id, 'name':line.name, 'product_id':line.product_id.id, 'product_uom_qty': line.product_uom_qty, 'location_id': line.location_id.id, 'location_dest_id': line.location_dest_id.id})]})
         return res
