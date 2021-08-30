@@ -39,7 +39,7 @@ class ImportFile(models.TransientModel):
         res = super(ImportFile, self).default_get(fields)
         stock_picking = self.env['stock.picking'].browse(self._context.get('active_ids',[]))
         for line in stock_picking.move_lines:
-            print(line)
+            print("line: ",line)
         vals = []
         """a = stock_picking.move_lines
         for product_line in stock_picking.move_lines:
