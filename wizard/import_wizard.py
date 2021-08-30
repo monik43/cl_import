@@ -39,21 +39,12 @@ class ImportFile(models.TransientModel):
         res = super(ImportFile, self).default_get(fields)
         stock_picking = self.env['stock.picking'].browse(self._context.get('active_ids',[]))
         for line in stock_picking.move_lines:
-            print("line: ",line)
-        vals = []
-        """a = stock_picking.move_lines
-        for product_line in stock_picking.move_lines:
-            vals.append(product_line.id)
-        stock_picking.move_lines = a
-        print(vals)
-        res.update({'products_move': [(6,0, vals)]})
-        return res"""
+            res.update({'products_move': [(4, line)]})
         return res
 
     @api.multi
     def import_file(self):
-        print("test")
-        """try:
+        try:
             fp = tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx")
             fp.write(binascii.a2b_base64(self.file_import))
             fp.seek(0)
@@ -71,11 +62,12 @@ class ImportFile(models.TransientModel):
                 values.update({'lot_id': line[0]})
                 res = self.create_move_lines(values)
                 
-        return res"""
+        return res
 
     @api.multi
     def create_move_lines(self, values):
+        res = self.env['stock.move'].browse(self._context.get('active_ids'[]))
         if values.get("lot_id"):
             s = str(values.get("lot_id"))
             lot_id = s.rstrip('0').rstrip('.') if '.' in s else s
-            #res.create({'move_line_nosuggest_ids':[(0,0, {'name':str(lot_id),'lot_id': lot_id, 'qty_done':1, 'product_uom_id':1,'location_id':self.product.location_id,'location_dest_id':self.product.location_dest_id})]})
+            res.create({'move_line_nosuggest_ids':[(0,0, {'name':str(lot_id),'lot_id': lot_id, 'qty_done':1, 'product_uom_id':1,'location_id':self.product.location_id,'location_dest_id':self.product.location_dest_id})]})
