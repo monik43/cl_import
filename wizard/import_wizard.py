@@ -49,7 +49,7 @@ class ImportFile(models.TransientModel):
 
     @api.multi
     def import_file(self):
-        print(self.product)
+        print("test")
         """try:
             fp = tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx")
             fp.write(binascii.a2b_base64(self.file_import))
