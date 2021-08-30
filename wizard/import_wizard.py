@@ -66,7 +66,7 @@ class ImportFile(models.TransientModel):
 
     @api.multi
     def create_move_lines(self, values):
-        res = self.env['stock.move'].browse(self._context.get('active_ids'[]))
+        res = self.env['stock.move'].browse(self._context.get('active_ids',[]))
         if values.get("lot_id"):
             s = str(values.get("lot_id"))
             lot_id = s.rstrip('0').rstrip('.') if '.' in s else s
