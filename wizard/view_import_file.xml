@@ -8,6 +8,7 @@
 			<field name="arch" type="xml">
 				<form string="Importar archivo">
 					<group>
+						<field name="origin" invisible="0"/>
 						<field name="products_move" invisible="0"/>
 						<field name="product"/>
 						<field name="file_import" filename="name"/>
