@@ -73,5 +73,5 @@ class ImportFile(models.TransientModel):
         if values.get("lot_id"):
             s = str(values.get("lot_id"))
             lot_id = s.rstrip('0').rstrip('.') if '.' in s else s
-
-            self.product.update({'move_line_ids':[(0,0, {'lot_id': lot_id, 'qty_done':1, 'product_uom_id':1,'location_id':self.product.location_id,'location_dest_id':self.product.location_dest_id})]})
+            res = self.env['stock.move'].browse(self._context.get('active_ids',[]))
+            res.update({'move_line_ids':[(0,0, {'lot_id': lot_id, 'qty_done':1, 'product_uom_id':1,'location_id':self.product.location_id,'location_dest_id':self.product.location_dest_id})]})
