@@ -1,23 +1,22 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "cl_import",
+    'name': "Importar XLS",
 
     'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
+        Módulo para importar archivos XLSX.""",
 
     'description': """
-        Long description of module's purpose
+        Localizado dentro del formulario de stock picking, el objetivo de este módulo es agilizar el proceso de entrada de equipos al sistema.
     """,
 
-    'author': "My Company",
-    'website': "http://www.yourcompany.com",
+    'author': "Cloudalia Educacion",
+    'website': "https://cloudaliaeducacion.com",
 
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/11.0/odoo/addons/base/module/module_data.xml
     # for the full list
-    'category': 'Uncategorized',
-    'version': '0.1',
+    'category': 'Purchases',
+    'version': '11.0.0.1',
 
     # any module necessary for this one to work correctly
     'depends': ['base','stock'],
