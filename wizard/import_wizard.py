@@ -77,5 +77,5 @@ class ImportFile(models.TransientModel):
                 if line.product_id.id == self.product.id:
                     u_id = line.product_id.id
 
-            res.update({'move_lines': [(1, u_id, {'move_line_nosuggest_ids': [(0, 0, {'name': lot_id, 'lot_id': lot_id, 'qty_done': 1,
+            res.update({'move_lines': [(1, u_id, {'move_line_nosuggest_ids': [(0, 0, {'name': str(lot_id), 'lot_id': lot_id, 'qty_done': 1,
                        'product_uom_id': 1, 'location_id': self.product.location_id, 'location_dest_id': self.product.location_dest_id})]})]})
