@@ -29,11 +29,8 @@ class ImportFile(models.TransientModel):
     _name = "cl.import.file"
     
     origin = fields.Char()
-    products_move = fields.One2many('stock.move','picking_id')
     product = fields.Many2one('stock.move', "Producto a procesar", domain="[('origin','=',origin)]")
     file_import = fields.Binary("Archivo a importar")
-
-    
 
     @api.model
     def default_get(self, fields):
@@ -70,4 +67,4 @@ class ImportFile(models.TransientModel):
         if values.get("lot_id"):
             s = str(values.get("lot_id"))
             lot_id = s.rstrip('0').rstrip('.') if '.' in s else s
-            res.update({'move_line_nosuggest_ids':[(0,0, {'name':str(lot_id),'lot_id': lot_id, 'qty_done':1, 'product_uom_id':1,'location_id':self.product.location_id,'location_dest_id':self.product.location_dest_id})]})
+            res.update({'move_line_nosuggest_ids':[(0,0, {'name':lot_id,'lot_id': lot_id, 'qty_done':1, 'product_uom_id':1,'location_id':self.product.location_id,'location_dest_id':self.product.location_dest_id})]})
