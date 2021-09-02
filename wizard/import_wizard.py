@@ -74,6 +74,7 @@ class ImportFile(models.TransientModel):
             ####
             data = {}
             for line in res.move_lines:
+                print(line.id, line.name)
                 if line.product_id.id == self.product.id:
                     print("/encontrado"*5)
                     data["id"] = line.product_id.id
