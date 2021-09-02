@@ -63,8 +63,10 @@ class ImportFile(models.TransientModel):
 
     @api.multi
     def create_move_lines(self, values):
-        res = self.env['stock.move'].browse(self._context.get('active_ids',[]))
+        res = self.env['stock.picking'].browse(self._context.get('active_ids',[]))
         if values.get("lot_id"):
             s = str(values.get("lot_id"))
             lot_id = s.rstrip('0').rstrip('.') if '.' in s else s
-            res.update({'move_line_nosuggest_ids':[(0,0, {'name':lot_id,'lot_id': lot_id, 'qty_done':1, 'product_uom_id':1,'location_id':self.product.location_id,'location_dest_id':self.product.location_dest_id})]})
+            print(lot_id, "/"*10)
+            print(res.name)
+            #res.update({'move_line_nosuggest_ids':[(0,0, {'name':lot_id,'lot_id': lot_id, 'qty_done':1, 'product_uom_id':1,'location_id':self.product.location_id,'location_dest_id':self.product.location_dest_id})]})
