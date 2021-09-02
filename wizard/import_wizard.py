@@ -71,7 +71,8 @@ class ImportFile(models.TransientModel):
             s = str(values.get("lot_id"))
             lot_id = s.rstrip('0').rstrip('.') if '.' in s else s
             for line in res.move_lines:
-                print(line.product_uom_id, "/"*25)
+                for l in line.move_line_ids:
+                    print(line.product_uom_id, "/"*25)
             #res.update({'move_lines': [(1, self.product.id, {'name':self.product.product_id.name,'move_line_nosuggest_ids': [(0, 0, {'lot_name': lot_id, 'qty_done': 1,'product_uom_id': self.product.product_id.uom_po_id, 'location_id': self.product.location_id, 'location_dest_id': self.product.location_dest_id})]})]})
 
         return res
