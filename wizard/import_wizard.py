@@ -72,7 +72,7 @@ class ImportFile(models.TransientModel):
             lot_id = s.rstrip('0').rstrip('.') if '.' in s else s
 
             ####
-            data = []
+            data = {}
             for line in res.move_lines:
                 if line.product_id.id == self.product.id:
                     data['id'] = line.product_id.id
