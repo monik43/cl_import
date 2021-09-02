@@ -72,12 +72,11 @@ class ImportFile(models.TransientModel):
             lot_id = s.rstrip('0').rstrip('.') if '.' in s else s
 
             ####
-            u_id = 0
-            g_id = 0
+            data = []
             for line in res.move_lines:
                 if line.product_id.id == self.product.id:
-                    u_id = line.product_id.id
-                    g_id = line.group_id.id
+                    data['id'] = line.product_id.id
+                    data['name'] = line.name
 
-            res.update({'move_lines': [(1, u_id, {'move_line_nosuggest_ids': [(0, 0, {'name':"uhfgaehgbaegaielrgae",'lot_id': lot_id, 'qty_done': 1,'product_uom_id': 1, 'location_id': self.product.location_id, 'location_dest_id': self.product.location_dest_id, 'group_id': g_id})]})]})
+            res.update({'move_lines': [(1, data['id'], {'name':data['name'],'move_line_nosuggest_ids': [(0, 0, {'lot_id': lot_id, 'qty_done': 1,'product_uom_id': 1, 'location_id': self.product.location_id, 'location_dest_id': self.product.location_dest_id})]})]})
         return res
