@@ -27,15 +27,17 @@ except ImportError:
 
 class ImportFile(models.TransientModel):
     _name = "cl.import.file"
-    
+
     origin = fields.Char()
-    product = fields.Many2one('stock.move', "Producto a procesar", domain="[('origin','=',origin)]")
+    product = fields.Many2one(
+        'stock.move', "Producto a procesar", domain="[('origin','=',origin)]")
     file_import = fields.Binary("Archivo a importar")
 
     @api.model
     def default_get(self, fields):
         res = super(ImportFile, self).default_get(fields)
-        stock_picking = self.env['stock.picking'].browse(self._context.get('active_ids',[]))
+        stock_picking = self.env['stock.picking'].browse(
+            self._context.get('active_ids', []))
         res.update({'origin': stock_picking.origin})
         return res
 
@@ -58,16 +60,21 @@ class ImportFile(models.TransientModel):
                     'utf-8') or str(row.value), sheet.row(row_no)))
                 values.update({'lot_id': line[0]})
                 res = self.create_move_lines(values)
-                
+
         return res
 
     @api.multi
     def create_move_lines(self, values):
-        res = self.env['stock.picking'].browse(self._context.get('active_ids',[]))
+        res = self.env['stock.picking'].browse(
+            self._context.get('active_ids', []))
         if values.get("lot_id"):
             s = str(values.get("lot_id"))
             lot_id = s.rstrip('0').rstrip('.') if '.' in s else s
+
+            ####
             for line in res.move_lines:
-                print(line.product_id.name)
-                print("---")
-            #res.update({'move_lines':[(0,0, {'name':lot_id,'lot_id': lot_id, 'qty_done':1, 'product_uom_id':1,'location_id':self.product.location_id,'location_dest_id':self.product.location_dest_id})]})
+                if line.product_id.id == self.product.id:
+                    u_id = line.product_id.id
+
+            res.update({'move_lines': [(1, u_id, {'move_line_nosuggest_ids': [(0, 0, {'name': lot_id, 'lot_id': lot_id, 'qty_done': 1,
+                       'product_uom_id': 1, 'location_id': self.product.location_id, 'location_dest_id': self.product.location_dest_id})]})]})
