@@ -52,8 +52,8 @@ class ImportFile(models.TransientModel):
             workbook = xlrd.open_workbook(fp.name)
             sheet = workbook.sheet_by_index(0)
 
-        except:
-            raise Warning(_("Archivo inválido"))
+        """except:
+            raise Warning(_("Archivo inválido"))"""
 
         r = sheet.nrows - 1
         if r > self.product.product_uom_qty:
