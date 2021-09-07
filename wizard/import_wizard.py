@@ -55,7 +55,7 @@ class ImportFile(models.TransientModel):
 
         except:
             raise Warning(_("Archivo inválido"))
-
+        print(self.w_1)
         r = sheet.nrows - 1
         if r > self.product.product_uom_qty and not self.w_1:
             self.w_1 = True
