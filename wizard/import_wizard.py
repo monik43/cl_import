@@ -41,6 +41,7 @@ class ImportFile(models.TransientModel):
         res.update({'origin': stock_picking.origin})
         return res
 
+    @api.multi
     def teeest(self):
         print("YAY","/"*25)
 
