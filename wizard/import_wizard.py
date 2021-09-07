@@ -54,8 +54,9 @@ class ImportFile(models.TransientModel):
         except:
             raise Warning(_("Archivo inválido"))
 
-        #for nrow in range(sheet.nrows):
-        print(self.product.product_uom_qty)
+        r = sheet.nrows - 1
+        if r > self.product.product_uom_qty:
+            print("r > self.product.product_uom_qty")
 
         for row_no in range(sheet.nrows):
             if row_no != 0:
