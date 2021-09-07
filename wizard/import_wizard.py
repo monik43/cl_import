@@ -58,6 +58,17 @@ class ImportFile(models.TransientModel):
         if r > self.product.product_uom_qty:
             raise Warning(_("En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto."))
 
+        test = []
+        for ro in range(sheet.nrows):
+            if ro != 0:
+                line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode('utf-8') or str(row.value), sheet.row(ro)))
+                test.append(line[0])
+                
+        for x in range(test):
+            for y in range(test):
+                if test[x] == test[y]:
+                    print("/"*25," ", test[x], " ", test[y])
+
     @api.multi
     def import_file(self):
         try:
