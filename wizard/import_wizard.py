@@ -7,7 +7,7 @@ import tempfile
 import binascii
 import xlrd
 from datetime import date, datetime
-from odoo.exceptions import Warning, UserError
+from odoo.exceptions import Warning, UserError, RedirectWarning
 from odoo import models, fields, exceptions, api, _
 import logging
 _logger = logging.getLogger(__name__)
@@ -41,6 +41,9 @@ class ImportFile(models.TransientModel):
         res.update({'origin': stock_picking.origin})
         return res
 
+    def teeest(self):
+        print("YAY","/"*25)
+
     @api.multi
     def import_file(self):
         try:
@@ -56,7 +59,7 @@ class ImportFile(models.TransientModel):
 
         r = sheet.nrows - 1
         if r > self.product.product_uom_qty:
-            raise Warning(_("En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto."))
+            raise RedirectWarning(_("En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto."),super(ImportFile, self).teeest(),_("Test"))
         
         test = []
         for ro in range(sheet.nrows):
