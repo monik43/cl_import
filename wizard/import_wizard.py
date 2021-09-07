@@ -54,7 +54,7 @@ class ImportFile(models.TransientModel):
         except:
             raise Warning(_("Archivo inválido"))
 
-        print(range(sheet.nrows))
+        print(sheet.nrows)
         #for nrow in range(sheet.nrows):
 
         for row_no in range(sheet.nrows):
