@@ -68,10 +68,11 @@ class ImportFile(models.TransientModel):
                 test.append(line[0])
 
         # print(test)
-        for i in len(test):
-            for x in len(test):
+        for i in range(len(test)):
+            for x in range(len(test)):
                 if i != x and test[i] == test[x]:
                     print(test[i], " ", i, " ", x)
+
         for x in test:
             for y in test:
                 if x == y:
