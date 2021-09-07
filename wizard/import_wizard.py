@@ -54,10 +54,9 @@ class ImportFile(models.TransientModel):
         except:
             raise Warning(_("Archivo inválido"))
 
-        i = 0
-        for nrow in range(sheet.nrows):
-            print(i)
-            i += 1
+        print(range(sheet.nrows))
+        #for nrow in range(sheet.nrows):
+
         for row_no in range(sheet.nrows):
             if row_no != 0:
                 line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode(
