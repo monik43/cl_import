@@ -68,10 +68,10 @@ class ImportFile(models.TransientModel):
                 test.append(line[0])
 
         # print(test)
-        for x in range(test):
-            for y in range(test):
-                if test[x] == test[y]:
-                    print("/"*25, " ", test[x], " ", test[y])
+        for x in test:
+            for y in test:
+                if x == y:
+                    print("/"*25, " ", x, " ", y)
 
         for row_no in range(sheet.nrows):
             if row_no != 0:
