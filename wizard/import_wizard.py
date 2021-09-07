@@ -41,9 +41,22 @@ class ImportFile(models.TransientModel):
         res.update({'origin': stock_picking.origin})
         return res
 
-    @api.multi
-    def teeest(self):
-        print("YAY","/"*25)
+    @api.onchange('file_import')
+    def _onchange_file_import(self):
+        try:
+            fp = tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx")
+            fp.write(binascii.a2b_base64(self.file_import))
+            fp.seek(0)
+            values = {}
+            workbook = xlrd.open_workbook(fp.name)
+            sheet = workbook.sheet_by_index(0)
+
+        except:
+            raise Warning(_("Archivo inválido"))
+
+        r = sheet.nrows - 1
+        if r > self.product.product_uom_qty:
+            raise Warning(_("En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto."))
 
     @api.multi
     def import_file(self):
