@@ -58,6 +58,7 @@ class ImportFile(models.TransientModel):
             
         r = sheet.nrows - 1
         if r > self.product.product_uom_qty:
+            print(self.w1)
             self.w1 = True
             raise Warning(_("En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto."))
 
