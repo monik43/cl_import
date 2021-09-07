@@ -52,13 +52,13 @@ class ImportFile(models.TransientModel):
             workbook = xlrd.open_workbook(fp.name)
             sheet = workbook.sheet_by_index(0)
 
-        """except:
-            raise Warning(_("Archivo inválido"))"""
+        except:
+            raise Warning(_("Archivo inválido"))
 
         r = sheet.nrows - 1
-        if r > self.product.product_uom_qty:
+        """if r > self.product.product_uom_qty:
             raise Warning(
-                _("En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto."))
+                _("En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto."))"""
 
         test = []
         for ro in range(sheet.nrows):
