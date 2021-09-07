@@ -60,8 +60,9 @@ class ImportFile(models.TransientModel):
 
         r = sheet.nrows - 1
         if r > self.product.product_uom_qty:
-            raise RedirectWarning(_("En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto."),super(ImportFile, self).teeest(),_("Test"))
-        
+            action = self.env.ref('cl_import.teeest')
+            msg = _('En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto.')
+            raise RedirectWarning(msg, action.id, _('Test'))
         test = []
         for ro in range(sheet.nrows):
             if ro != 0:
