@@ -41,33 +41,6 @@ class ImportFile(models.TransientModel):
         res.update({'origin': stock_picking.origin})
         return res
 
-    @api.onchange('file_import')
-    def _onchange_file_import(self):
-        try:
-            fp = tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx")
-            fp.write(binascii.a2b_base64(self.file_import))
-            fp.seek(0)
-            values = {}
-            workbook = xlrd.open_workbook(fp.name)
-            sheet = workbook.sheet_by_index(0)
-
-        except:
-            raise Warning(_("Archivo inválido"))
-
-        r = sheet.nrows - 1
-        if r > self.product.product_uom_qty:
-            raise Warning(_("En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto."))
-
-        test = []
-        for ro in range(sheet.nrows):
-            if ro != 0:
-                line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode('utf-8') or str(row.value), sheet.row(ro)))
-                test.append(line[0])
-                
-        for x in range(test):
-            for y in range(test):
-                if test[x] == test[y]:
-                    print("/"*25," ", test[x], " ", test[y])
 
     @api.multi
     def import_file(self):
@@ -82,17 +55,23 @@ class ImportFile(models.TransientModel):
         except:
             raise Warning(_("Archivo inválido"))
 
+        r = sheet.nrows - 1
+        if r > self.product.product_uom_qty:
+            raise Warning(
+                _("En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto."))
+
         test = []
         for ro in range(sheet.nrows):
             if ro != 0:
-                line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode('utf-8') or str(row.value), sheet.row(ro)))
+                line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode(
+                    'utf-8') or str(row.value), sheet.row(ro)))
                 test.append(line[0])
 
-        #print(test)
+        # print(test)
         for x in range(test):
             for y in range(test):
                 if test[x] == test[y]:
-                    print("/"*25," ", test[x], " ", test[y])
+                    print("/"*25, " ", test[x], " ", test[y])
 
         for row_no in range(sheet.nrows):
             if row_no != 0:
