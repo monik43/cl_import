@@ -64,7 +64,11 @@ class ImportFile(models.TransientModel):
                 line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode('utf-8') or str(row.value), sheet.row(ro)))
                 test.append(line[0])
 
-        print(test)
+        #print(test)
+        for x in range(test):
+            for y in range(test):
+                if test[x] == test[y]:
+                    print("/"*25," ", test[x], " ", test[y])
 
         for row_no in range(sheet.nrows):
             if row_no != 0:
