@@ -71,11 +71,6 @@ class ImportFile(models.TransientModel):
         except:
             raise Warning(_("Archivo inválido"))
 
-        r = sheet.nrows - 1
-        if r > self.product.product_uom_qty:
-            action = self.env.ref('cl.import.file.teeest')
-            msg = _('En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto.')
-            raise RedirectWarning(msg, action.id, _('Test'))
         test = []
         for ro in range(sheet.nrows):
             if ro != 0:
