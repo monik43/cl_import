@@ -32,6 +32,7 @@ class ImportFile(models.TransientModel):
     product = fields.Many2one(
         'stock.move', "Producto a procesar", domain="[('origin','=',origin)]")
     file_import = fields.Binary("Archivo a importar")
+    w_1 = False
 
     @api.model
     def default_get(self, fields):
@@ -56,9 +57,10 @@ class ImportFile(models.TransientModel):
             raise Warning(_("Archivo inválido"))
 
         r = sheet.nrows - 1
-        """if r > self.product.product_uom_qty:
+        if r > self.product.product_uom_qty and not self.w_1:
+            self.w_1 = True
             raise Warning(
-                _("En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto."))"""
+                _("En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto."))
 
         test = []
         for ro in range(sheet.nrows):
