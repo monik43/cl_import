@@ -32,7 +32,7 @@ class ImportFile(models.TransientModel):
     product = fields.Many2one(
         'stock.move', "Producto a procesar", domain="[('origin','=',origin)]")
     file_import = fields.Binary("Archivo a importar")
-    w_1 = False
+    w_1 = fields.Boolean()
 
     @api.model
     def default_get(self, fields):
