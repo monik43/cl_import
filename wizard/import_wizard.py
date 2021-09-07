@@ -56,7 +56,7 @@ class ImportFile(models.TransientModel):
 
         r = sheet.nrows - 1
         if r > self.product.product_uom_qty:
-            print("r > self.product.product_uom_qty")
+            print(r, self.product.product_uom_qty, "/"*25)
 
         for row_no in range(sheet.nrows):
             if row_no != 0:
