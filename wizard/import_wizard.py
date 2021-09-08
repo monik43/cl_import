@@ -64,8 +64,8 @@ class ImportFile(models.TransientModel):
             if ro != 0:
                 line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode(
                     'utf-8') or str(row.value), sheet.row(ro)))
-                if line[0] in test:
-                    raise Warning(_("En el archivo que estás intentando hay nº de serie repetidos. Revisa que todo sea correcto."))
+                """if line[0] in test:
+                    raise Warning(_("En el archivo que estás intentando hay nº de serie repetidos. Revisa que todo sea correcto."))"""
                 test.append(line[0])
 
         """for i in range(len(test)):
