@@ -8,6 +8,6 @@ class stockmove(models.Model):
     def name_get(self):
         res = []
         for rec in self:
-            name = rec.product_id.name + " >> ["+str(rec.id)+"]"
+            name = "["+str(rec.default_code)+"] " + rec.product_id.name
             res.append((rec.id,name))
         return res
