@@ -29,7 +29,6 @@ class ImportFile(models.TransientModel):
     _name = "cl.import.file"
 
     origin = fields.Char()
-    tested = fields.Boolean()
     product = fields.Many2one(
         'stock.move', "Producto a procesar", domain="[('origin','=',origin)]")
     file_import = fields.Binary("Archivo a importar")
@@ -71,16 +70,19 @@ class ImportFile(models.TransientModel):
                 if i != x and nlist[i] == nlist[x] and n not in rep:
                     rep.append(n)
 
-        if r > self.product.product_uom_qty :
-            msg = msg + "\n- Hay " + str(r - self.product.product_uom_qty).rstrip('.0') + " nº de serie adicionales a los que se espera."
+        if r > self.product.product_uom_qty:
+            msg = msg + "\n- Hay " + str(r - self.product.product_uom_qty).rstrip(
+                '.0') + " nº de serie adicionales a los que se espera."
             err = True
         elif r < self.product.product_uom_qty:
-            msg = msg + "\n- Hay " + str(self.product.product_uom_qty - r).rstrip('.0') + " menos nº de serie de los que se espera."
+            msg = msg + "\n- Hay " + str(self.product.product_uom_qty - r).rstrip(
+                '.0') + " menos nº de serie de los que se espera."
             err = True
         if rep:
-            msg = msg + "\n- Los siguientes nº de serie están repetidos: " + str(rep).lstrip("[").rstrip("]") + "."
+            msg = msg + "\n- Los siguientes nº de serie están repetidos: " + \
+                str(rep).lstrip("[").rstrip("]") + "."
             err = True
-            
+
         msg = msg + "\nModifique el archivo si los errores no son intencionados."
 
         if err:
