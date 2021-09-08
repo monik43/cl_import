@@ -58,7 +58,7 @@ class ImportFile(models.TransientModel):
         r = sheet.nrows - 1
         if r > self.product.product_uom_qty :
             raise Warning(_("En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto."))
-
+        print("________________________________________________________________________")
         for ro in range(sheet.nrows):
             if ro != 0:
                 line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode(
@@ -68,6 +68,7 @@ class ImportFile(models.TransientModel):
         for i in range(len(nlist)):
             for x in range(len(nlist)):
                 if i != x and nlist[i] == nlist[x] and nlist[i] not in rep:
+                    print("rep")
                     rep.append(nlist[i])
 
         if rep:
