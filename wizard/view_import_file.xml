@@ -9,24 +9,6 @@
 				<form string="Importar archivo">
 					<group>
 						<field name="lines_to_import"/>
-							<tree editable="bottom">
-								<field name="picking_id" invisible="1"/>
-								<field name="product_id" invisible="1"/>
-								<field name="in_entire_package" invisible="1"/>
-								<field name="state" invisible="1"/>
-								<field name="location_id" attrs="{'readonly': [('in_entire_package', '=', True)]}" invisible="1" domain="[('id', 'child_of', parent.location_id)]" groups="stock.group_stock_multi_locations"/>
-								<field name="location_dest_id" attrs="{'readonly': [('in_entire_package', '=', True)]}" invisible="1" domain="[('id', 'child_of', parent.location_dest_id)]" groups="stock.group_stock_multi_locations"/>
-								<field name="lot_id" attrs="{'readonly': [('in_entire_package', '=', True)]}" invisible="not context.get('show_lots_m2o')" domain="[('product_id', '=', parent.product_id)]" groups="stock.group_production_lot" context="{'default_product_id': parent.product_id, 'active_picking_id': picking_id}"/>
-								<field name="lot_name" attrs="{'readonly': [('in_entire_package', '=', True)]}" invisible="not context.get('show_lots_text')" groups="stock.group_production_lot"/>
-								<field name="package_id" attrs="{'readonly': [('in_entire_package', '=', True)]}" invisible="not context.get('show_package')" groups="stock.group_tracking_lot" domain="[('location_id', '=', location_id)]"/>
-								<field name="result_package_id" attrs="{'readonly': [('in_entire_package', '=', True)]}" groups="stock.group_tracking_lot" domain="['|', '|', ('location_id', '=', False), ('location_id', '=', location_dest_id), ('id', '=', package_id)]"/>
-								<field name="CSN" /><!--attrs="{'invisible':[('lot_id','=',False)]}" -->
-								<field name="ship_order_move" string="Ship/Transport Order"/>
-								<field name="is_initial_demand_editable" invisible="1"/>
-								<field name="product_uom_qty" invisible="not context.get('show_reserved_quantity')" readonly="1"/>
-								<field name="is_locked" invisible="1"/>
-								<field name="qty_done" attrs="{'readonly': ['|','|', ('is_initial_demand_editable', '=', True), '&amp;', ('state', '=', 'done'), ('is_locked', '=', True), ('in_entire_package', '=', True)]}"/>
-							</tree>
 						<field name="origin" invisible="1"/>
 						<field name="product"/>
 						<field name="file_import" filename="name"/>
