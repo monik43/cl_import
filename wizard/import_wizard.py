@@ -76,7 +76,7 @@ class ImportFile(models.TransientModel):
             msg = msg + "\n\t- Los siguientes nº de serie están repetidos: " + str(rep) + "."
 
         if (r > self.product.product_uom_qty) or rep:
-            raise Warning(_(msg, "\nModifique el archivo si los errores no son intencionados."))
+            raise Warning(_(msg + "\nModifique el archivo si los errores no son intencionados."))
         else:
             raise Warning(_("Puede importar el archivo sin problemas."))
 
