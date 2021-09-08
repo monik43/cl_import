@@ -71,10 +71,10 @@ class ImportFile(models.TransientModel):
                     rep.append(nlist[i])
 
         if r > self.product.product_uom_qty :
-            msg = msg + "\n\t- Hay "+str((r - self.product.product_uom_qty).rstrip('0').rstrip('.'))+" nº de serie adicionales a los que se espera."
+            msg = msg + "\n\t- Hay " + str(r - self.product.product_uom_qty).rstrip('0').rstrip('.') + " nº de serie adicionales a los que se espera."
             err = True
         elif r < self.product.product_uom_qty:
-            msg = msg + "\n\t- Hay "+str((self.product.product_uom_qty - r).rstrip('0').rstrip('.'))+" menos nº de serie de los que se espera."
+            msg = msg + "\n\t- Hay " + str(self.product.product_uom_qty - r).rstrip('0').rstrip('.') + " menos nº de serie de los que se espera."
             err = True
         if rep:
             msg = msg + "\n\t- Los siguientes nº de serie están repetidos: " + str(rep) + "."
