@@ -54,11 +54,10 @@ class ImportFile(models.TransientModel):
             sheet = workbook.sheet_by_index(0)
         except:
             raise Warning(_("Archivo inválido"))
-            
+        msg = "En el archivo que está intentando importar:"
         r = sheet.nrows - 1
-        if r > self.product.product_uom_qty :
-            raise Warning(_("En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto."))
-        print("________________________________________________________________________"*10)
+        
+
         for ro in range(sheet.nrows):
             if ro != 0:
                 line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode(
@@ -71,9 +70,15 @@ class ImportFile(models.TransientModel):
                     print("rep")
                     rep.append(nlist[i])
 
+        if r > self.product.product_uom_qty :
+            msg = msg + "\n\t- Hay más nº de serie de los que se espera."
         if rep:
-            raise Warning(_("En el archivo que estás intentando importar hay los siguientes números de serie repetidos:\n",
-            rep, "\nSi no desea añadir nº de serie repetidos, modifique el archivo y repita el proceso."))
+            msg = msg + "\n\t- Los siguientes nº de serie están repetidos: " + str(rep) + "."
+
+        if (r > self.product.product_uom_qty) or rep:
+            raise Warning(_(msg, "\nModifique el archivo si los errores no son intencionados."))
+        else:
+            raise Warning(_("Puede importar el archivo sin problemas."))
 
     @api.multi
     def import_file(self):
