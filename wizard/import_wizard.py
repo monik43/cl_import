@@ -31,7 +31,6 @@ class ImportFile(models.TransientModel):
     origin = fields.Char()
     product = fields.Many2one(
         'stock.move', "Producto a procesar", domain="[('origin','=',origin)]")
-    lines_to_import = fields.One2Many('stock.move.line', 'move_id')
     file_import = fields.Binary("Archivo a importar")
 
     @api.model
@@ -52,23 +51,23 @@ class ImportFile(models.TransientModel):
             values = {}
             workbook = xlrd.open_workbook(fp.name)
             sheet = workbook.sheet_by_index(0)
-
         except:
             raise Warning(_("Archivo inválido"))
             
-        r = sheet.nrows - 1
+        """r = sheet.nrows - 1
         if r > self.product.product_uom_qty :
             raise Warning(_("En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto."))
-
+"""
         test = []
         for ro in range(sheet.nrows):
             if ro != 0:
                 line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode(
                     'utf-8') or str(row.value), sheet.row(ro)))
+                if line[0] in test:
+                    raise Warning(_("En el archivo que estás intentando hay nº de serie repetidos. Revisa que todo sea correcto."))
                 test.append(line[0])
 
-        # print(test)
-        for i in range(len(test)):
+        """for i in range(len(test)):
             for x in range(len(test)):
                 if i != x and test[i] == test[x]:
                     print(test[i], " ", i, " ", x)
@@ -76,7 +75,7 @@ class ImportFile(models.TransientModel):
         for x in test:
             for y in test:
                 if x == y:
-                    print("/"*25, " ", x, " ", y)
+                    print("/"*25, " ", x, " ", y)"""
 
         for row_no in range(sheet.nrows):
             if row_no != 0:
