@@ -29,11 +29,10 @@ class ImportFile(models.TransientModel):
     _name = "cl.import.file"
 
     origin = fields.Char()
+    tested = fields.Boolean()
     product = fields.Many2one(
         'stock.move', "Producto a procesar", domain="[('origin','=',origin)]")
     file_import = fields.Binary("Archivo a importar")
-    move_lines = fields.One2many('stock.move', 'picking_id', string="Stock Moves", copy=True)
-    #lines_to_import = fields.One2many('stock.move.line', 'move_id', domain=[('product_qty', '=', 0.0)])
 
     @api.model
     def default_get(self, fields):
@@ -43,6 +42,37 @@ class ImportFile(models.TransientModel):
         res.update({'origin': stock_picking.origin})
         return res
 
+    @api.multi
+    def test_file(self):
+        try:
+            fp = tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx")
+            fp.write(binascii.a2b_base64(self.file_import))
+            fp.seek(0)
+            nlist = []
+            rep = []
+            workbook = xlrd.open_workbook(fp.name)
+            sheet = workbook.sheet_by_index(0)
+        except:
+            raise Warning(_("Archivo inválido"))
+            
+        r = sheet.nrows - 1
+        if r > self.product.product_uom_qty :
+            raise Warning(_("En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto."))
+
+        for ro in range(sheet.nrows):
+            if ro != 0:
+                line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode(
+                    'utf-8') or str(row.value), sheet.row(ro)))
+                nlist.append(line[0])
+
+        for i in range(len(nlist)):
+            for x in range(len(nlist)):
+                if i != x and nlist[i] == nlist[x] and nlist[i] not in rep:
+                    rep.append(nlist[i])
+
+        if rep:
+            raise Warning(_("En el archivo que estás intentando importar hay los siguientes números de serie repetidos:\n",
+            rep, "\nSi no desea añadir nº de serie repetidos, modifique el archivo y repita el proceso."))
 
     @api.multi
     def import_file(self):
@@ -55,16 +85,6 @@ class ImportFile(models.TransientModel):
             sheet = workbook.sheet_by_index(0)
         except:
             raise Warning(_("Archivo inválido"))
-            
-        """r = sheet.nrows - 1
-        if r > self.product.product_uom_qty :
-            raise Warning(_("En el archivo que estás intentando importar hay más nº de serie de lo esperado, revisa que todo sea correcto."))"""
-        test = []
-        for ro in range(sheet.nrows):
-            if ro != 0:
-                line = list(map(lambda row: isinstance(row.value, bytes) and row.value.encode(
-                    'utf-8') or str(row.value), sheet.row(ro)))
-                test.append(line[0])
 
         for row_no in range(sheet.nrows):
             if row_no != 0:
@@ -72,19 +92,16 @@ class ImportFile(models.TransientModel):
                     'utf-8') or str(row.value), sheet.row(row_no)))
                 values.update({'lot_id': line[0]})
                 res = self.create_move_lines(values)
-        print("/"*50)
-        print(self.lines_to_import)
+
         return res
 
     @api.multi
     def create_move_lines(self, values):
-        res = self.env['cl.import.file'].browse(
+        res = self.env['stock.picking'].browse(
             self._context.get('active_ids', []))
         if values.get("lot_id"):
             s = str(values.get("lot_id"))
             lot_id = s.rstrip('0').rstrip('.') if '.' in s else s
-
-        #res.update({'lines_to_import': [(0, 0, {'product_id': self.product.product_id.id, 'lot_name': lot_id, 'qty_done': 1, 'product_uom_id': self.product.product_id.uom_po_id, 'location_id': self.product.location_id, 'location_dest_id': self.product.location_dest_id})]})
 
         res.update({'move_lines': [(1, self.product.id, {'name': self.product.product_id.name, 'move_line_nosuggest_ids': [(0, 0, {'product_id': self.product.product_id.id, 'lot_name': lot_id, 'qty_done': 1,
                    'product_uom_id': self.product.product_id.uom_po_id, 'location_id': self.product.location_id, 'location_dest_id': self.product.location_dest_id})]})]})

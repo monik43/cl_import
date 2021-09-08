@@ -14,7 +14,8 @@
 						<field name="file_import" filename="name"/>
 					</group>
 					<footer>
-						<button string="Import" name="import_file" type="object" class="oe_highlight" />
+						<button string="Import" name="import_file" type="object" class="oe_highlight"/>
+						<button string="Test file" name="test_file" type="object" />
 						<button string="Cancel" class="oe_link" special="cancel" />
 					</footer>
 				</form>
