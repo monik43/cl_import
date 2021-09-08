@@ -32,6 +32,7 @@ class ImportFile(models.TransientModel):
     product = fields.Many2one(
         'stock.move', "Producto a procesar", domain="[('origin','=',origin)]")
     file_import = fields.Binary("Archivo a importar")
+    lines_to_import = fields.One2many('stock.move.line', 'move_id', domain=[('product_qty', '=', 0.0)])
 
     @api.model
     def default_get(self, fields):
@@ -83,18 +84,21 @@ class ImportFile(models.TransientModel):
                     'utf-8') or str(row.value), sheet.row(row_no)))
                 values.update({'lot_id': line[0]})
                 res = self.create_move_lines(values)
-
+        print("/"*50)
+        print(self.lines_to_import)
         return res
 
     @api.multi
     def create_move_lines(self, values):
-        res = self.env['stock.picking'].browse(
+        res = self.env['cl.import.file'].browse(
             self._context.get('active_ids', []))
         if values.get("lot_id"):
             s = str(values.get("lot_id"))
             lot_id = s.rstrip('0').rstrip('.') if '.' in s else s
 
-        res.update({'move_lines': [(1, self.product.id, {'name': self.product.product_id.name, 'move_line_nosuggest_ids': [(0, 0, {'product_id': self.product.product_id.id, 'lot_name': lot_id, 'qty_done': 1,
-                   'product_uom_id': self.product.product_id.uom_po_id, 'location_id': self.product.location_id, 'location_dest_id': self.product.location_dest_id})]})]})
+        res.update({'lines_to_import': [(0, 0, {'product_id': self.product.product_id.id, 'lot_name': lot_id, 'qty_done': 1, 'product_uom_id': self.product.product_id.uom_po_id, 'location_id': self.product.location_id, 'location_dest_id': self.product.location_dest_id})]})
 
+        """res.update({'move_lines': [(1, self.product.id, {'name': self.product.product_id.name, 'move_line_nosuggest_ids': [(0, 0, {'product_id': self.product.product_id.id, 'lot_name': lot_id, 'qty_done': 1,
+                   'product_uom_id': self.product.product_id.uom_po_id, 'location_id': self.product.location_id, 'location_dest_id': self.product.location_dest_id})]})]})
+"""
         return res
