@@ -78,8 +78,8 @@ class ImportFile(models.TransientModel):
             err = True
         if rep:
             rlist = str(rep)
-            rlist.lstrip("[").rstrip("]")
-            print(rlist, "/"*50)
+            rlist.lstrip("[")
+            print(rlist.lstrip("["), "/"*50)
             msg = msg + "\n\t- Los siguientes nº de serie están repetidos: " + rlist + "."
             err = True
 
