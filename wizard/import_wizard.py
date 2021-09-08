@@ -57,6 +57,7 @@ class ImportFile(models.TransientModel):
         msg = "En el archivo que está intentando importar:"
         r = sheet.nrows - 1
         err = False
+        NOERR = "Puede importar el archivo sin problemas."
 
         for ro in range(sheet.nrows):
             if ro != 0:
@@ -71,19 +72,21 @@ class ImportFile(models.TransientModel):
                     rep.append(n)
 
         if r > self.product.product_uom_qty :
-            msg = msg + "\n    - Hay " + str(r - self.product.product_uom_qty).rstrip('.0') + " nº de serie adicionales a los que se espera."
+            msg = msg + "\n- Hay " + str(r - self.product.product_uom_qty).rstrip('.0') + " nº de serie adicionales a los que se espera."
             err = True
         elif r < self.product.product_uom_qty:
-            msg = msg + "\n    - Hay " + str(self.product.product_uom_qty - r).rstrip('.0') + " menos nº de serie de los que se espera."
+            msg = msg + "\n- Hay " + str(self.product.product_uom_qty - r).rstrip('.0') + " menos nº de serie de los que se espera."
             err = True
         if rep:
-            msg = msg + "\n    - Los siguientes nº de serie están repetidos: " + str(rep).lstrip("[").rstrip("]") + "."
+            msg = msg + "\n- Los siguientes nº de serie están repetidos: " + str(rep).lstrip("[").rstrip("]") + "."
             err = True
+            
+        msg = msg + "\nModifique el archivo si los errores no son intencionados."
 
         if err:
-            raise Warning(_(msg + "\nModifique el archivo si los errores no son intencionados."))
+            raise Warning(_(msg))
         else:
-            raise Warning(_("Puede importar el archivo sin problemas."))
+            raise Warning(_(NOERR))
 
     @api.multi
     def import_file(self):
